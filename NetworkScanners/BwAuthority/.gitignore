@@ -1,6 +1,9 @@
 local.cfg
 bwscan.V3BandwidthsFile
 
+cron-mine.sh
+bwauthenv
+
 data/bwscan*
 data/aggregate-control.log
 data/aggregate-debug.log

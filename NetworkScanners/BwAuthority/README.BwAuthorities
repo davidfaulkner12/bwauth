@@ -45,6 +45,8 @@ to install a python 2.6/2.7 virtual environment. This script will download all
 of the dependencies and install them for you, but it will require that you
 have a copy of python2.6 or python2.7 installed and in your path.
 
+The steps to setup the crontab entries are in the setup_cron.sh script. 
+
 2.2. Manual setup
 
 You really should at least look at the virtualenv setup.sh script before
@@ -69,32 +71,22 @@ side the current torflow checkout. Here is how you would set that up:
   ./configure --disable-asciidoc
   make -j4
 
+If you are compiling this on a Mac running El Capitan, you may receive an error
+about OpenSSL not being available, even if you have installed it using brew
+or another tool. A simple solution if you've installed it using brew is:
+
+  cd /usr/local/include
+  ln -s ../opt/openssl/include/openssl .
+
+  ./configure --prefix=/usr/local/opt/openssl --disable-asciidoc --enable-static-openssl --with-openssl-dir=/usr/local/opt/openssl
+
 2.2.3. Install Python Dependencies
 
-The Bandwidth Authorities use the SQLAlchemy is 0.7.2 and Elixir 0.7.1.
+The Bandwidth Authorities use SQLAlchemy 0.7.8, pysqlite 2.8.3 and Elixir 0.7.1.
 
-If your distribution does not provide 0.7.x, you will likely want to
-download that tarball from:
+You can install these by running
 
-http://pypi.python.org/pypi/SQLAlchemy/
-
-Untar it in the same directory that contains the TorFlow checkout and
-your git checkout (for peace of mind, you will want all three in the
-same place).
-
-If your distribution does not provide Elixir 0.7.x, do the
-same with Elixir:
-
-http://pypi.python.org/pypi/Elixir/
-
-So for example, an ls in ~/code/tor/ should look like this:
-
-# ls ~/code/tor/
-Elixir-0.7.1         SQLAlchemy-0.7.2           tor.git
-Elixir-0.7.1.tar.gz  SQLAlchemy-0.7.2.tar.gz    torflow-trunk
-
-Both these libraries also depend upon python-pysqlite2, which should be 
-a package for your distribution (you want 2.3.x for SQLite 3.x).
+  pip install -r $SCANNER_DIR/requirements.txt
 
 2.2.4. Set up a cron job to submit results
 
@@ -117,7 +109,7 @@ Note that authorities vote every hour starting at 50 past the hour.
 Hence the 45 to give us time to gather the results and copy them over.
 
 The script has two locations that you should consider editing. First
-is the SCANNER_DIR variable, which you should point at this 
+is the SCANNER_DIR variable, which you should point at this
 directory. The second is the bit at the end, where you need to choose
 if you want to scp the result (held in file $OUTPUT) to a different
 machine, or just copy it into place.
@@ -129,7 +121,7 @@ not possible, you can configure your scanner to sleep during a different
 time by editing the bwauthority.cfg files in ./data/scanner.*.
 
 For more fine grained tuning, note that the scanner using ./data/scanner.1
-will require the most bandwidth, and ./data/scanner.4 will require the 
+will require the most bandwidth, and ./data/scanner.4 will require the
 least.
 
 
@@ -141,7 +133,7 @@ their results to count, they must be paired with a working dirauth.
 The dirauth-side configuration option is V3BandwidthsFile. It specifies the
 file containing your measured results, which we will configure in the later
 steps. Pick a location accessible by your Tor directory authority process and
-any rsync user you may have. 
+any rsync user you may have.
 
 I recommend /var/lib/tor.scans/bwscan. If you try to use /var/lib/tor, tor
 will reset your permissions and exclude any other users from writing the file
@@ -162,7 +154,7 @@ at the various exit nodes. Self-signed certs are OK.
 
 The server will consume around 12-15Gbytes/day.
 
-Here are two shell script snippets to generate the files we will need 
+Here are two shell script snippets to generate the files we will need
 for scanning and testing:
 
 for i in 64 32 16 8 4 2 1; do
@@ -172,5 +164,3 @@ done
 for i in 512 256 128 64 32 16; do
   dd if=/dev/urandom of=./${i}k bs=1k count=$i
 done
-
-

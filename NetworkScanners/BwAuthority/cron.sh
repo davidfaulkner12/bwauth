@@ -1,7 +1,7 @@
 #!/bin/sh
 
 SCANNER_DIR=$(dirname "$0")
-SCANNER_DIR=$(readlink -f "$SCANNER_DIR")
+#SCANNER_DIR=$(readlink -f "$SCANNER_DIR")
 
 TIMESTAMP=`date +%Y%m%d-%H%M`
 ARCHIVE=$SCANNER_DIR/data/bwscan.${TIMESTAMP}
