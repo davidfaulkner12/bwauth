@@ -1,8 +1,7 @@
 #!/bin/bash -e
 
 SCANNER_DIR=$(dirname "$0")
-if [ `uname` != "Darwin" ]
-then
+if readlink -f "$SCANNER_DIR"; then
   SCANNER_DIR=$(readlink -f "$SCANNER_DIR")
 fi
 
