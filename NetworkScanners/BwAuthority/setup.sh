@@ -2,12 +2,11 @@
 
 SCANNER_DIR=$(dirname "$0")
 # readlink -f does not work on Mac
-if [ `uname` != "Darwin" ]
-then
+if readlink -f "$SCANNER_DIR"; then
   SCANNER_DIR=$(readlink -f "$SCANNER_DIR")
 fi
 
-PYTHON=$(which python2.7 || which python2.6)
+PYTHON=$(which python2.7 || which python2.6 || which python)
 
 # 1. Install python if needed
 if [ -z "$(which $PYTHON)" ]

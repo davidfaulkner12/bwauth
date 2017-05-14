@@ -8,7 +8,6 @@ SCANNER_COUNT=$(($SCANNERS_PER_TOR_COUNT * $TOR_COUNT + 1))
 # This tor must have the w status line fix as well as the stream bw fix
 # Ie git master or 0.2.2.x
 TOR_EXE=../../../tor/src/or/tor
-PYTHONPATH=../../../SQLAlchemy-0.7.10/lib:../../../Elixir-0.7.1/
 
 ! [ -e "./local.cfg" ] || . "./local.cfg"
 

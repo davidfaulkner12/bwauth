@@ -20,3 +20,5 @@ data/tor*/tor.pid
 
 data/scanner.*/bw.log
 data/scanner.*/bwauthority.pid
+
+**/.DS_Store
